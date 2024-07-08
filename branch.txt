@@ -1,0 +1,7 @@
+git init
+git remote add origin https://github.com/MikhailoMK/Cometa-IT-Bootcamp
+git pull origin main
+git add branch.txt
+git status
+git commit -m "create branch.txt"
+git push origin main
