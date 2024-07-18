@@ -1,0 +1,20 @@
+---
+- name: Pull Project
+  hosts: localhost
+  gather_facts: no
+  become: true
+
+  tasks:
+    - name: Install Oracle Database 21c XE
+      community.docker.docker_container:
+        name: ora_21_3_0
+        image: gvenzl/oracle-xe:21.3.0
+        state: started
+        restart: true
+        ports:
+          - 1521:1521
+        volumes:
+          - oracle-volume:/opt/oracle/oradata
+        env:
+          ORACLE_PASSWORD: system
+

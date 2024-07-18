@@ -1,0 +1,17 @@
+---
+- name: Pull Project
+  hosts: ec2_servers
+  gather_facts: no
+  become: true
+  vars:
+    home: /home/ubuntu/code_git
+
+  tasks:
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/MikhailoMK/Cometa-IT-Bootcamp.git'
+        dest: "{{ home }}"
+
+    - name: Tear down existing services
+      community.docker.docker_compose_v2:
+        project_src: "{{ home }}/dock"

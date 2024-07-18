@@ -1,0 +1,20 @@
+---
+- name: Install and start Nginx
+  hosts: ec2_servers
+  become: true
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx package
+      apt:
+        name: nginx
+        state: latest
+
+    - name: Ensure Nginx service is enabled and running
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes

@@ -1,0 +1,15 @@
+---
+- name: Deploy HTML page
+  hosts: ec2_servers
+  become: true
+
+  tasks:
+    - name: Copy index.html to web server directory
+      copy:
+        src: /home/mikhailomk/ans/index.html
+        dest: /var/www/html/index.html
+
+    - name: Ensure Nginx service is restarted
+      service:
+        name: nginx
+        state: started

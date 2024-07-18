@@ -1,0 +1,73 @@
+---
+- name: Install and start PosgtreSQL and create db OSKAR and user OSKAR
+  hosts: ec2_servers
+  become: true
+  gather_facts: false
+  vars:
+    db_user: OSCAR
+    db_password: oscar
+    db_name: OSCAR
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install PostgreSQL package
+      apt:
+        name:
+          - postgresql
+          - python3-psycopg2
+          - acl
+        state: latest
+
+    - name: Ensure PostgreSQL service is enabled and running
+      systemd:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Create app database
+      postgresql_db:
+        state: present
+        name: "{{ db_name }}"
+      become_user: postgres
+
+    - name: Create db user
+      postgresql_user:
+        state: present
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+      become_user: postgres
+
+    - name: Grant db user access to app db
+      postgresql_privs:
+        type: database
+        database: "{{ db_name }}"
+        roles: "{{ db_user }}"
+        grant_option: no
+        privs: all
+      become_user: postgres
+
+    - name: Allow md5 connection for the db user
+      postgresql_pg_hba:
+        dest: "/etc/postgresql/16/main/pg_hba.conf"
+        contype: host
+        databases: all
+        source: 0.0.0.0/0
+        method: md5
+        users: "{{ db_user }}"
+        create: true
+      become_user: postgres
+
+    - name: Start listener
+      lineinfile:
+        dest: /etc/postgresql/16/main/postgresql.conf
+        regexp: '^#?listen_addresses = .*'
+        line: "listen_addresses = '*'"
+
+    - name: Restart PostgreSQL service
+      systemd:
+        name: postgresql
+        state: restarted
+        enabled: yes
