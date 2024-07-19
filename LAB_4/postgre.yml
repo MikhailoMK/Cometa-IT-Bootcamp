@@ -1,5 +1,5 @@
 ---
-- name: Install and start PosgtreSQL and create db OSKAR and user OSKAR
+- name: Install and start PosgtreSQL and create db OSKAR and user OSKAR # Выполнять всё будем на хостах группы ec2_servers с правами супервользователся (root).
   hosts: ec2_servers
   become: true
   gather_facts: false
