@@ -1,7 +1,8 @@
 ---
-- name: Install and start Nginx # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root)
+- name: Install and start Nginx # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root), также отключаем автоматический сбор фактов
   hosts: ec2_servers
   become: true
+  gather_facts: false
 
   tasks:
     - name: Update apt package cache # Обновляем пакеты
