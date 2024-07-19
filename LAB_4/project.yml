@@ -19,3 +19,4 @@
 
 # После запуска плейбука нужно будет в  вашем браузере перейти по следующей ссылке http://<your_ipv4_address>:5000/n
 # Вместо n нужно указать id строки, которую хотите вывести
+# Сами докерфайлы хранятся в репозитории https://github.com/MikhailoMK/Cometa-IT-Bootcamp/tree/main/dock в папках flask и postgres
