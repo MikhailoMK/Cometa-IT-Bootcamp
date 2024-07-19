@@ -1,5 +1,5 @@
 ---
-- name: Pull Project # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root), также отключаем автоматический сбор фактов
+- name: Pull Project # Выполнять всё будем на локальном хосте с правами суперпользователя (root), также отключаем автоматический сбор фактов
   hosts: localhost
   gather_facts: no
   become: true
@@ -17,3 +17,5 @@
           - oracle-volume:/opt/oracle/oradata # Тут том
         env:
           ORACLE_PASSWORD: system # Пароль для sys и system
+
+# После запуска плейбука можем при помощи клиента на windows подключиться к нашей БД и начать работу с ней
