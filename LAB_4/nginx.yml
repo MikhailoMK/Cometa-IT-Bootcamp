@@ -1,19 +1,19 @@
 ---
-- name: Install and start Nginx
+- name: Install and start Nginx # Выполнять всё будем на хостах группы ec2_servers с правами супервользователся (root)
   hosts: ec2_servers
   become: true
 
   tasks:
-    - name: Update apt package cache
+    - name: Update apt package cache # Обновляем пакеты
       apt:
         update_cache: yes
 
-    - name: Install Nginx package
+    - name: Install Nginx package # Устанавливаем последнюю версию nginx
       apt:
         name: nginx
         state: latest
 
-    - name: Ensure Nginx service is enabled and running
+    - name: Ensure Nginx service is enabled and running # Запускаем nginx 
       systemd:
         name: nginx
         state: started
