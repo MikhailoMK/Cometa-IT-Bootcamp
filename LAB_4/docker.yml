@@ -1,10 +1,11 @@
 ---
-- name: Install Docker
+- name: Install Docker # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root), также отключаем автоматический сбор фактов
   hosts: ec2_servers
   gather_facts: no
   become: true
+  
   tasks:
-    - name: Install required system packages
+    - name: Install required system packages # Устанавливаем все необходимые зависимости
       apt:
         pkg:
           - apt-transport-https
@@ -17,17 +18,17 @@
           - python3-docker
         state: latest
 
-    - name: Add Docker GPG apt Key
+    - name: Add Docker GPG apt Key # Добавляем GPG ключ, чтобы система доверяла пакетам загружаемым из докера
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
-    - name: Add Docker Repository
+    - name: Add Docker Repository # Добавляем репозиторий в систему
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
 
-    - name: Update apt and install docker-ce
+    - name: Update apt and install docker-ce # Пакеты для работы с докером
       apt:
         name: docker-ce
         state: latest
