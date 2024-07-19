@@ -1,5 +1,5 @@
 ---
-- name: Install and start Nginx # Выполнять всё будем на хостах группы ec2_servers с правами супервользователся (root)
+- name: Install and start Nginx # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root)
   hosts: ec2_servers
   become: true
 
