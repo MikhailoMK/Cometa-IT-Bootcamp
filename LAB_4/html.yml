@@ -1,15 +1,16 @@
 ---
-- name: Deploy HTML page
+- name: Deploy HTML page # Выполнять всё будем на хостах группы ec2_servers с правами супервользователся (root)
   hosts: ec2_servers
   become: true
 
   tasks:
-    - name: Copy index.html to web server directory
+    - name: Copy index.html to web server directory # Копироуем index.html из директории на сервере в директорию на хосте
       copy:
         src: /home/mikhailomk/ans/index.html
         dest: /var/www/html/index.html
 
-    - name: Ensure Nginx service is restarted
-      service:
+    - name: Ensure Nginx service is restarted # Перезапускаем nginx
+      systemd:
         name: nginx
-        state: started
+        state: restarted
+        enabled: yes
