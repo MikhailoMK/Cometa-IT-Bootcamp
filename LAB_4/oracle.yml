@@ -1,20 +1,19 @@
 ---
-- name: Pull Project
+- name: Pull Project # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root), также отключаем автоматический сбор фактов
   hosts: localhost
   gather_facts: no
   become: true
 
   tasks:
-    - name: Install Oracle Database 21c XE
+    - name: Install Oracle Database 21c XE # Устанавливаем контейнер с DOckerHub, указываем порт для подключения к БД, а также том для хранения данных oracle
       community.docker.docker_container:
         name: ora_21_3_0
-        image: gvenzl/oracle-xe:21.3.0
+        image: gvenzl/oracle-xe:21.3.0 # Тут указываем необходимый Docker Image
         state: started
         restart: true
         ports:
-          - 1521:1521
+          - 1521:1521 # Тут порты
         volumes:
-          - oracle-volume:/opt/oracle/oradata
+          - oracle-volume:/opt/oracle/oradata # Тут том
         env:
-          ORACLE_PASSWORD: system
-
+          ORACLE_PASSWORD: system # Пароль для sys и system
