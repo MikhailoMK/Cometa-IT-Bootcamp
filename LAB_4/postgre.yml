@@ -3,17 +3,17 @@
   hosts: ec2_servers
   become: true
   gather_facts: false
-  vars:
+  vars: # Прописываем переменные, которые будем использовать для настройки
     db_user: OSCAR
     db_password: oscar
     db_name: OSCAR
 
   tasks:
-    - name: Update apt package cache
+    - name: Update apt package cache # Обновляем пакеты
       apt:
         update_cache: yes
 
-    - name: Install PostgreSQL package
+    - name: Install PostgreSQL package # Устанавливаем PostgreSQL и необходимые зависимости
       apt:
         name:
           - postgresql
@@ -21,26 +21,26 @@
           - acl
         state: latest
 
-    - name: Ensure PostgreSQL service is enabled and running
+    - name: Ensure PostgreSQL service is enabled and running # Запускаем PostgreSQL
       systemd:
         name: postgresql
         state: started
         enabled: yes
 
-    - name: Create app database
+    - name: Create app database # Создаём БД под пользователем postgres (тот, что на уровне ОС)
       postgresql_db:
         state: present
         name: "{{ db_name }}"
       become_user: postgres
 
-    - name: Create db user
+    - name: Create db user # Создаём пользователя
       postgresql_user:
         state: present
         name: "{{ db_user }}"
         password: "{{ db_password }}"
       become_user: postgres
 
-    - name: Grant db user access to app db
+    - name: Grant db user access to app db # Выдаем права пользователю
       postgresql_privs:
         type: database
         database: "{{ db_name }}"
@@ -49,7 +49,7 @@
         privs: all
       become_user: postgres
 
-    - name: Allow md5 connection for the db user
+    - name: Allow md5 connection for the db user # Добавляем в pg_hba.conf подключение к пользоваетлю
       postgresql_pg_hba:
         dest: "/etc/postgresql/16/main/pg_hba.conf"
         contype: host
@@ -60,13 +60,13 @@
         create: true
       become_user: postgres
 
-    - name: Start listener
+    - name: Start listener # Запускаем listener
       lineinfile:
         dest: /etc/postgresql/16/main/postgresql.conf
         regexp: '^#?listen_addresses = .*'
         line: "listen_addresses = '*'"
 
-    - name: Restart PostgreSQL service
+    - name: Restart PostgreSQL service # Перезагружаем postgresql, чтобы применить изменения
       systemd:
         name: postgresql
         state: restarted
