@@ -1,17 +1,21 @@
 ---
-- name: Pull Project
+- name: Pull Project # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root), также отключаем автоматический сбор фактов
   hosts: ec2_servers
   gather_facts: no
   become: true
   vars:
-    home: /home/ubuntu/code_git
+    home: /home/ubuntu/code_git # Папка, в которую загрузим репозиторий
 
   tasks:
-    - name: Git checkout
+    - name: Git checkout # Загрузка самого репозитория
       ansible.builtin.git:
         repo: 'https://github.com/MikhailoMK/Cometa-IT-Bootcamp.git'
         dest: "{{ home }}"
 
-    - name: Tear down existing services
+    - name: Tear down existing services # Запуск файла docker-compose.yml
       community.docker.docker_compose_v2:
         project_src: "{{ home }}/dock"
+
+
+# После запуска плейбука нужно будет в  вашем браузере перейти по следующей ссылке http://<your_ipv4_address>:5000/n
+# Вместо n нужно указать id строки, которую хотите вывести
