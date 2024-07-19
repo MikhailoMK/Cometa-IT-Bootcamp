@@ -1,7 +1,8 @@
 ---
-- name: Deploy HTML page # Выполнять всё будем на хостах группы ec2_servers с правами супервользователся (root)
+- name: Deploy HTML page # Выполнять всё будем на хостах группы ec2_servers с правами суперпользователя (root), также отключаем автоматический сбор фактов
   hosts: ec2_servers
   become: true
+  gather_facts: false
 
   tasks:
     - name: Copy index.html to web server directory # Копироуем index.html из директории на сервере в директорию на хосте
